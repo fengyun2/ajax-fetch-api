@@ -46,3 +46,26 @@ fetchRequest('./data/data.json')
 .then(data => {
   console.log('Promise+fetch/data', data)
 })
+
+// async await
+
+;(async () => {
+  let data = await fetchRequest('./data/data.json')
+  let users = await fetchRequest('./data/users.json')
+  let products = await fetchRequest('./data/products.json')
+
+  console.log('ES7 Async/data >>>', data)
+  console.log('ES7 Async/users >>>', users)
+  console.log('ES7 Async/products >>>', products)
+
+  // Parallel operations with async + fetch
+
+  let parallelDataFetch = Promise.all([
+    await fetchRequest('./data/data.json'),
+    await fetchRequest('./data/users.json'),
+    await fetchRequest('./data/products.json')
+  ]).then(data => {
+    console.log('Async parallel+fetch >>>', data)
+  })
+})()
+
