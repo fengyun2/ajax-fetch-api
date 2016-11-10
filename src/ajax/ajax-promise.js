@@ -2,10 +2,10 @@
 * @Author: fengyun2
 * @Date:   2016-11-10 11:30:40
 * @Last Modified by:   fengyun2
-* @Last Modified time: 2016-11-10 15:48:42
+* @Last Modified time: 2016-11-10 16:21:00
 */
 
-import ajax from './core/ajax'
+import ajax, {postRequest} from './core/ajax'
 
 /**
  * 封装好的 promise+ajax
@@ -29,7 +29,7 @@ export const getPromise = (url, options) => {
  */
 export const postPromise = (url, options) => {
   return new Promise((resolve, reject) => {
-    ajax(url, options, response => {
+    postRequest(url, options, response => {
       resolve(JSON.parse(response))
     })
   })

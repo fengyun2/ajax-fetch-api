@@ -1,9 +1,12 @@
+/**
+ * demo
+ */
 import 'babel-polyfill'
 
 // original-ajax
 
 import ajax from './ajax/core/ajax'
-import {getPromise} from './ajax/ajax-promise'
+import {getPromise, postPromise} from './ajax/ajax-promise'
 import {fetchRequest} from './ajax/core/fetch'
 
 // original
@@ -27,6 +30,9 @@ getPromise('./data/data.json').then(data => {
 getPromise('./data/users.json').then(users => {
   console.log('Promises/users >>>', users)
 })
+// postPromise('./data/users.json', {data: {username: 'ly', age: 20, sex: 'male'}}).then(users => {
+//   console.log('Promises/users >>>', users)
+// })
 
 getPromise('./data/products.json').then(products => {
   console.log('Promises/products', products)

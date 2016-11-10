@@ -2,7 +2,7 @@
 * @Author: fengyun2
 * @Date:   2016-11-10 11:30:40
 * @Last Modified by:   fengyun2
-* @Last Modified time: 2016-11-10 16:10:59
+* @Last Modified time: 2016-11-10 16:17:46
 */
 
 /**
@@ -53,8 +53,8 @@ export const fetchRequest = (url, options) => {
     delete options.type
   }
   if (!!options && !!options.contentType) {
-    if (typeof options.contentType !== 'string') {
-      console.error('contentType参数必须是字符串')
+    if (typeof options.contentType !== 'string' || typeof options.contentType !== 'object') {
+      console.error('contentType参数必须是字符串或者对象')
       return
     }
     options.headers = Object.assign({}, {headers: ori_options.headers}, {headers: options.contentType})

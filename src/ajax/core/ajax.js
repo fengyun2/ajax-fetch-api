@@ -2,7 +2,7 @@
 * @Author: fengyun2
 * @Date:   2016-11-10 11:30:40
 * @Last Modified by:   fengyun2
-* @Last Modified time: 2016-11-10 15:50:20
+* @Last Modified time: 2016-11-10 16:32:40
 */
 
 /**
@@ -36,6 +36,7 @@ const createXHR = (url, options, callback = () => {}) => {
     }
   }
   xhr.open(options.type, options.url, true)
+  xhr.setRequestHeader('Accept', 'application/json')
   xhr.setRequestHeader('Content-Type', options.contentType)
   xhr.send(options.data)
   // xhr.open('GET', url, true) xhr.setRequestHeader('Content-Type',
@@ -98,23 +99,23 @@ function postDataFormat(obj) {
     return
   }
 
-  // 支持有FormData的浏览器（Firefox 4+ , Safari 5+, Chrome和Android 3+版的bkit）
-  if (typeof FormData === 'function') {
-    let data = new FormData()
-    for (let attr in obj) {
-      data.append(attr, obj[attr])
-    }
-    return data
-  } else {
+  // 支持有FormData的浏览器（Firefox 4+ , Safari 5+, Chrome和Android 3+版的bkit）(form表单提交)
+  // if (typeof FormData === 'function') {
+  //   let data = new FormData()
+  //   for (let attr in obj) {
+  //     data.append(attr, obj[attr])
+  //   }
+  //   return data
+  // } else {
     // 不支持FormData的浏览器的处理
-    let arr = new Array()
+    let arr = []
     let i = 0
     for (let attr in obj) {
       arr[i] = encodeURIComponent(attr) + '=' + encodeURIComponent(obj[attr])
       i++
     }
-    return arr.join('')
-  }
+    return arr.join('&')
+  // }
 }
 
 export default getRequest
