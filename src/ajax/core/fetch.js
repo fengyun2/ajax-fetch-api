@@ -1,8 +1,8 @@
 /*
 * @Author: fengyun2
 * @Date:   2016-11-10 11:30:40
-* @Last Modified by:   fengyun2
-* @Last Modified time: 2016-11-10 16:17:46
+ * @Last Modified by:   fengyun2
+ * @Last Modified time: 2016-11-17 23:50:16
 */
 
 /**
@@ -25,10 +25,42 @@ function parseJSON(response) {
   return response.json()
 }
 
+/**
+ * 格式化post 传递的数据
+ * @param  {[type]} obj [description]
+ * @return {[type]}     [description]
+ */
+function postDataFormat(obj) {
+  if (typeof obj !== 'object') {
+    console.error('入的参数必须是对象')
+    return
+  }
+
+  let arr = []
+  let i = 0
+  for (let attr in obj) {
+    arr[i] = encodeURIComponent(attr) + '=' + encodeURIComponent(obj[attr])
+    i++
+  }
+  return arr.join('&')
+}
+
+function getDataFormat(url, data) {
+  url += (url.indexOf('?') === -1)
+    ? '?'
+    : '&'
+  if (!!data) {
+    for (let prop in data) {
+      url += encodeURIComponent(prop) + '=' + encodeURIComponent(data[prop])
+    }
+  }
+  return url
+}
+
 export const fetchRequest = (url, options) => {
   let ori_options = {
     method: 'GET',
-    mode: "no-cors",
+    mode: "cors",
     headers: {
       'Accept': 'application/json',
       // 'Content-Type': 'application/json'
@@ -41,7 +73,9 @@ export const fetchRequest = (url, options) => {
       console.error('data参数必须是对象')
       return
     }
-    options.body = Object.assign({}, {body: ori_options.body}, {body: options.data})
+    options.body = options.data
+
+    console.log(`body >>>`, options)
     delete options.data
   }
   if (!!options && !!options.type) {
@@ -57,10 +91,21 @@ export const fetchRequest = (url, options) => {
       console.error('contentType参数必须是字符串或者对象')
       return
     }
-    options.headers = Object.assign({}, {headers: ori_options.headers}, {headers: options.contentType})
+    options.headers = Object.assign({}, {
+      headers: ori_options.headers
+    }, {headers: options.contentType})
     delete options.contentType
   }
   options = Object.assign({}, ori_options, options, {url: url})
+
+  if (options.method.toUpperCase() === 'POST') {
+    options.body = postDataFormat(options.body)
+  } else {
+    url = getDataFormat(url, options.body)
+    delete options.body
+  }
+
+  console.log(`after >>>`, options)
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
